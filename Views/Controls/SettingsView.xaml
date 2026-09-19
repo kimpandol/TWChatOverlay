@@ -790,6 +790,15 @@
                             </Border>
                             <Border Style="{StaticResource SettingsRowStyle}">
                                 <DockPanel>
+                                    <CheckBox DockPanel.Dock="Right" IsChecked="{Binding AttachOverlaysToGameWindow}" Style="{StaticResource ToggleSwitchCheckBoxStyle}"/>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="게임 창에 부착" Style="{StaticResource SettingsRowLabelStyle}"/>
+                                        <Button Style="{StaticResource HelpButtonStyle}" Tag="display.attach_to_game_window" Click="Help_Click"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <Border Style="{StaticResource SettingsRowStyle}">
+                                <DockPanel>
                                     <CheckBox DockPanel.Dock="Right" IsChecked="{Binding UnifiedToastStack}" Style="{StaticResource ToggleSwitchCheckBoxStyle}"/>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <TextBlock Text="알림 표시 위치 통합" Style="{StaticResource SettingsRowLabelStyle}"

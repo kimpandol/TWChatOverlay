@@ -1,4 +1,4 @@
-{
+﻿{
   "Version": 2,
   "Chat": {
     "Filters": {
@@ -502,6 +502,7 @@
       "Content": 100,
       "Abaddon": 100
     },
+    "AttachOverlaysToGameWindow": true,
     "WindowSnapEnabled": false,
     "MenuBar": {
       "Pinned": false,

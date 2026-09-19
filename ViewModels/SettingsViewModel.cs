@@ -249,6 +249,19 @@ namespace TWChatOverlay.ViewModels
             }
         }
 
+        /// <summary>켜면 오버레이 창들이 게임 창 기준 상대 위치를 유지하며 게임 창을 따라 움직인다.</summary>
+        public bool AttachOverlaysToGameWindow
+        {
+            get => _settings.AttachOverlaysToGameWindow;
+            set
+            {
+                if (_settings.AttachOverlaysToGameWindow == value) return;
+                _settings.AttachOverlaysToGameWindow = value;
+                OnPropertyChanged();
+                SaveSettings();
+            }
+        }
+
         /// <summary>알림 표시 위치 통합: 켜면 모든 알림이 한 위치에 쌓이고, 끄면 종류별 위치에 각각 표시.</summary>
         public bool UnifiedToastStack
         {

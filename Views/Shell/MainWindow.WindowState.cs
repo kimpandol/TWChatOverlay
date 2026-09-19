@@ -450,8 +450,18 @@ namespace TWChatOverlay.Views
 
         private void SyncMarginsFromWindowPosition(double windowLeft, double windowTop)
         {
-            _settings.LineMarginLeft = windowLeft;
-            _settings.LineMargin = windowTop;
+            // 부착 모드에서는 절대좌표 대신 게임 창 기준 오프셋을 저장한다 (WindowStickyService가 이 값을
+            // 게임 창 위치 + 오프셋으로 재해석한다). 게임 창을 아직 못 찾았으면 예전처럼 절대좌표로 저장한다.
+            if (_settings.AttachOverlaysToGameWindow && GameWindowTracker.CurrentRect is { } gameRect)
+            {
+                _settings.LineMarginLeft = windowLeft - gameRect.Left;
+                _settings.LineMargin = windowTop - gameRect.Top;
+            }
+            else
+            {
+                _settings.LineMarginLeft = windowLeft;
+                _settings.LineMargin = windowTop;
+            }
         }
 
         private SubAddonWindow? CreateSubAddonWindow()
@@ -588,6 +598,7 @@ namespace TWChatOverlay.Views
                     return;
 
                 WindowPlacement.ApplyStored(window, _settings.BuffTrackerWindowLeft, _settings.BuffTrackerWindowTop);
+                GameWindowAnchorService.UpdateOffsetFromCurrentPosition(window);
 
                 // Buff tracker visibility is managed independently from the main chat overlay.
                 window.ApplyVisibility();

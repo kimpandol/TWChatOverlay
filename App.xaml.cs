@@ -12,6 +12,7 @@ namespace TWChatOverlay
     public partial class App : Application
     {
         private static Mutex? _mutex;
+        private static bool _ownsMutex;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -47,7 +48,7 @@ namespace TWChatOverlay
             }
 
             _mutex = new Mutex(true, "TWChatOverlay_SingleInstance", out bool isNewInstance);
-
+            _ownsMutex = isNewInstance;
             if (!isNewInstance)
             {
                 AppLogger.Warn("Startup cancelled because another instance is already running.");
@@ -100,6 +101,7 @@ namespace TWChatOverlay
             _ = RecaptureSupplyAlertService.PreloadAsync();
             SecondaryWindowTopmostRefreshService.Initialize();
             ForegroundTopmostGuard.Initialize();
+            GameWindowTracker.Initialize();
             base.OnStartup(e);
             AppLogger.Info("Core services initialized.");
 
@@ -232,8 +234,26 @@ namespace TWChatOverlay
             ForegroundTopmostGuard.Shutdown();
             EtaProfileResolver.DeleteCache();
             NotificationService.DeleteCachedAudioFiles();
-            _mutex?.ReleaseMutex();
-            _mutex?.Dispose();     
+            if (_mutex != null)
+            {
+                if (_ownsMutex)
+                {
+                    try
+                    {
+                        _mutex.ReleaseMutex();
+                    }
+                    catch (ApplicationException ex)
+                    {
+                        AppLogger.Warn("Attempted to release mutex but current thread did not own it.", ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        AppLogger.Warn("Unexpected exception while releasing mutex.", ex);
+                    }
+                }
+                _mutex.Dispose();
+                _mutex = null;
+            }
             AppLogger.Info("Application shutdown completed.");
             base.OnExit(e);
         }

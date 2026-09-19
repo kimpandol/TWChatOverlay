@@ -296,6 +296,11 @@ namespace TWChatOverlay.Models
         /// 설정 화면에는 내지 않는다. 게임 실행 파일 이름이 바뀌었을 때 settings.json에서만 고치는 값이다.
         /// </summary>
         public string TopmostGuardProcessNames { get; set; } = "InphaseNXD, Talesweaver";
+        /// <summary>
+        /// 켜면 오버레이 창들이 게임 창 기준 상대 위치(오프셋)를 유지하며, 게임 창이 움직이거나 크기가 바뀌면 같이 따라 움직인다.
+        /// 대상 프로세스 판별은 TopmostGuardProcessNames를 그대로 쓴다. 게임 창을 찾지 못하거나 최소화된 동안 오버레이는 숨는다.
+        /// </summary>
+        public bool AttachOverlaysToGameWindow { get; set; } = false;
         /// <summary>따로 여는 창(달력·컨텐츠·어밴던)의 배경 불투명도(%). 키는 OverlayOpacityService의 그룹 키.</summary>
         public Dictionary<string, double> OverlayOpacityByGroup { get; set; } = new(StringComparer.OrdinalIgnoreCase);
         public bool WindowSnapEnabled { get; set; } = false;

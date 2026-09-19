@@ -94,6 +94,13 @@ namespace TWChatOverlay.Views
             // 원본이 바뀌면 여기서 디바운스 저장한다. (250ms 안에 몰리는 변경은 한 번만 쓴다)
             ConfigService.SaveDeferred(_settings);
 
+            // 이 토글은 체크 직후 설정창을 바로 닫는 경우가 많아 250ms 디바운스 창을 놓치기 쉽다.
+            // 디바운스를 우회해 즉시 디스크에 반영한다.
+            if (e.PropertyName == nameof(_settings.AttachOverlaysToGameWindow))
+            {
+                ConfigService.Save(_settings);
+            }
+
             // 추가 기능 위치 미리보기 중 토글이 바뀌면 해당 탭의 창 표시를 다시 계산한다
             // (활성화하면 즉시 나타나고, 끄면 사라진다)
             if (_isAddonPositionMode && e.PropertyName is

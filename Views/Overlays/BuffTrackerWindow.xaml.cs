@@ -31,6 +31,7 @@ namespace TWChatOverlay.Views
             _tracker.ActiveRareBuffs.CollectionChanged += TrackerBuffs_CollectionChanged;
             _tracker.ActiveExpBuffs.CollectionChanged += TrackerBuffs_CollectionChanged;
             UiLockService.UnlockChanged += OnUnlockChanged;
+            GameWindowAnchorService.Attach(this);
             // 표시는 호출자(ApplyBuffTrackerWindowSettings)가 위치를 맞춘 뒤 ApplyVisibility로 결정한다
         }
 
@@ -103,6 +104,7 @@ namespace TWChatOverlay.Views
 
             // 드래그가 끝난 현재 위치를 공유 설정에 저장하고 도우미 창과 동기화
             _settings.SetBuffTrackerWindowPosition(Left, Top, notify: false);
+            GameWindowAnchorService.UpdateOffsetFromCurrentPosition(this);
             var helper = BuffTrackerHelperWindow.Instance;
             if (helper != null)
             {

@@ -91,6 +91,14 @@ namespace TWChatOverlay.Services
                 return;
             }
 
+            // 게임 창 부착 모드에서 게임 창을 찾지 못했거나(미실행) 최소화된 동안은 오버레이도 같이 숨긴다.
+            if (_settings.AttachOverlaysToGameWindow && !GameWindowTracker.IsAvailable)
+            {
+                HideOverlay();
+                NotifyAuxiliaryWindowVisibilityChanged(false);
+                return;
+            }
+
             ShowOverlay();
             ApplyTopmost();
 
@@ -103,8 +111,21 @@ namespace TWChatOverlay.Services
 
             if (_positionTrackingEnabled)
             {
-                double targetLeft = _settings.LineMarginLeft;
-                double targetTop = _settings.LineMargin;
+                double targetLeft;
+                double targetTop;
+
+                // 게임 창 부착 모드: LineMarginLeft/LineMargin을 절대좌표가 아니라 게임 창 기준 오프셋으로 쓴다.
+                // 게임 창을 아직 못 찾았으면(시작 직후 등) 오프셋을 절대좌표처럼 취급해 예전과 같이 동작시킨다.
+                if (_settings.AttachOverlaysToGameWindow && GameWindowTracker.CurrentRect is { } gameRect)
+                {
+                    targetLeft = gameRect.Left + _settings.LineMarginLeft;
+                    targetTop = gameRect.Top + _settings.LineMargin;
+                }
+                else
+                {
+                    targetLeft = _settings.LineMarginLeft;
+                    targetTop = _settings.LineMargin;
+                }
 
                 if (Math.Abs(_overlayWindow.Left - targetLeft) > 0.1)
                 {

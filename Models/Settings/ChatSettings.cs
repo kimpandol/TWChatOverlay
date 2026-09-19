@@ -1176,6 +1176,9 @@ namespace TWChatOverlay.Models
         /// <summary>항상 위를 다시 올릴 대상 프로세스 이름(쉼표 구분). 이 앱이 전경일 때만 오버레이를 재승격한다.</summary>
         [JsonIgnore]
         public string TopmostGuardProcessNames { get => Ui.TopmostGuardProcessNames; set { Ui.TopmostGuardProcessNames = value ?? string.Empty; OnPropertyChanged(); } }
+        /// <summary>켜면 오버레이 창들이 게임 창 기준 상대 위치를 유지하며 게임 창을 따라 움직인다. 게임 창이 없거나 최소화되면 오버레이도 같이 숨는다.</summary>
+        [JsonIgnore]
+        public bool AttachOverlaysToGameWindow { get => Ui.AttachOverlaysToGameWindow; set { Ui.AttachOverlaysToGameWindow = value; OnPropertyChanged(); } }
 
         /// <summary>메인·서브 채팅창과 자동으로 뜨는 창의 통합 배경 불투명도(%). 20~100. 텍스트는 항상 불투명.</summary>
         [JsonIgnore]
